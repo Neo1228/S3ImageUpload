@@ -14,7 +14,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # Docker 로그인 (GitHub Packages를 사용하는 경우)
+      # Docker 로그인 (DockerHub에 로그인)
       - name: Log in to DockerHub
         uses: docker/login-action@v2
         with:
@@ -24,8 +24,8 @@ jobs:
       # Docker 이미지 빌드 및 푸시
       - name: Build and push Docker image
         run: |
-          docker build -t <YourDockerHubUsername>/s3imageupload:latest .
-          docker push <YourDockerHubUsername>/s3imageupload:latest
+          docker build -t xoo1228/s3imageupload:latest .
+          docker push xoo1228/s3imageupload:latest
 
   deploy:
     runs-on: ubuntu-latest
@@ -40,7 +40,7 @@ jobs:
           username: ec2-user
           key: ${{ secrets.EC2_KEY }}
           script: |
-            docker pull <YourDockerHubUsername>/s3imageupload:latest
+            docker pull xoo1228/s3imageupload:latest
             docker stop s3imageupload || true
             docker rm s3imageupload || true
-            docker run -d --name s3imageupload -p 8080:8080 <YourDockerHubUsername>/s3imageupload:latest
+            docker run -d --name s3imageupload -p 8080:8080 xoo1228/s3imageupload:latest

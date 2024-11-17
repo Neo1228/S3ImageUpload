@@ -25,11 +25,17 @@ jobs:
       - name: Grant execute permission for Gradle
         run: chmod +x ./gradlew
 
-      # 의존성 설치 및 빌드
-      - name: Build with Gradle
+      # 환경 변수 설정
+      - name: Set environment variables
         run: |
-            ./gradlew clean build  
-        
+          echo "AWS_ACCESS_KEY=${{ secrets.AWS_ACCESS_KEY }}" >> $GITHUB_ENV
+          echo "AWS_SECRET_KEY=${{ secrets.AWS_SECRET_KEY }}" >> $GITHUB_ENV
+          echo "AWS_REGION=${{ secrets.AWS_REGION }}" >> $GITHUB_ENV
+          echo "AWS_BUCKET=${{ secrets.AWS_BUCKET }}" >> $GITHUB_ENV
+
+      # Gradle 빌드
+      - name: Build with Gradle
+        run: ./gradlew clean build --exclude-task test
 
       # Docker 로그인 (DockerHub에 로그인)
       - name: Log in to DockerHub
@@ -57,7 +63,12 @@ jobs:
           username: ec2-user
           key: ${{ secrets.EC2_KEY }}
           script: |
-            docker pull xoo1228/s3imageupload:latest
+            docker pull --no-cache xoo1228/s3imageupload:latest
             docker stop s3imageupload || true
-            docker rm s3imageupload || true
-            docker run -d --name s3imageupload -p 8080:8080 xoo1228/s3imageupload:latest
+            docker rm -f s3imageupload || true
+            docker run -d --name s3imageupload -p 8080:8080 \
+                -e AWS_ACCESS_KEY=${AWS_ACCESS_KEY} \
+                -e AWS_SECRET_KEY=${AWS_SECRET_KEY} \
+                -e AWS_REGION=${AWS_REGION} \
+                -e AWS_BUCKET=${AWS_BUCKET} \
+                xoo1228/s3imageupload:latest

@@ -13,11 +13,13 @@ jobs:
       # 소스 코드 체크아웃
       - name: Checkout code
         uses: actions/checkout@v3
+
       # JDK 설치
       - name: Set up JDK
         uses: actions/setup-java@v3
         with:
           java-version: '17'
+          distribution: 'temurin' # JDK 배포판 (AdoptOpenJDK 기반)
 
       # 의존성 설치 및 빌드
       - name: Build with Gradle

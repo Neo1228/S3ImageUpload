@@ -62,6 +62,7 @@ jobs:
           host: ${{ secrets.EC2_HOST }}
           username: ec2-user
           key: ${{ secrets.EC2_KEY }}
+          debug: true
           script: |
             docker pull --no-cache xoo1228/s3imageupload:latest
             docker stop s3imageupload || true

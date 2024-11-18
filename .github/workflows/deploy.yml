@@ -71,11 +71,11 @@ jobs:
           debug: true
           script: |
             # Docker 업데이트 및 실행
-            sudo yum update -y
-            sudo yum install -y docker
-            sudo service docker start
-            sudo usermod -aG docker ec2-user
-
+            sudo apt update -y
+            sudo apt install -y docker.io
+            sudo systemctl start docker
+            sudo systemctl daemon-reload
+            sudo usermod -aG docker ubuntu
             # Docker 이미지 배포
             docker pull --no-cache xoo1228/s3imageupload:latest
             docker stop s3imageupload || true

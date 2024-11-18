@@ -70,14 +70,15 @@ jobs:
           port: 22
           debug: true
           script: |
-            # Docker 업데이트 및 실행
+            # Docker 설치 및 설정
             sudo apt update -y
-            sudo apt install -y docker.io
-            sudo systemctl start docker
-            sudo systemctl daemon-reload
+            sudo apt remove -y docker docker-engine docker.io containerd runc || true
+            curl -fsSL https://get.docker.com -o get-docker.sh
+            sudo sh get-docker.sh
             sudo usermod -aG docker ubuntu
+
             # Docker 이미지 배포
-            docker pull --no-cache xoo1228/s3imageupload:latest
+            docker pull xoo1228/s3imageupload:latest
             docker stop s3imageupload || true
             docker rm -f s3imageupload || true
             docker run -d --name s3imageupload -p 8080:8080 \
@@ -86,3 +87,7 @@ jobs:
                 -e AWS_REGION=${AWS_REGION} \
                 -e AWS_BUCKET=${AWS_BUCKET} \
                 xoo1228/s3imageupload:latest
+
+            # Docker 컨테이너 상태 확인
+            docker ps -a
+            docker logs s3imageupload

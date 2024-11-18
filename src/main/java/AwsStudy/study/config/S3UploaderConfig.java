@@ -11,13 +11,13 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class S3UploaderConfig {
 
-    @Value("${cloud.aws.credentials.access-key}") // application.yml에서 값 읽기
+    @Value("${cloud.aws.credentials.access-key:default-access-key}")
     private String accessKey;
 
-    @Value("${cloud.aws.credentials.secret-key}") // application.yml에서 값 읽기
+    @Value("${cloud.aws.credentials.secret-key:default-secret-key}")
     private String secretKey;
 
-    @Value("${cloud.aws.region.static}") // application.yml에서 값 읽기
+    @Value("${cloud.aws.region.static:us-east-1}")
     private String region;
 
     @Bean

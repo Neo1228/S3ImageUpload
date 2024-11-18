@@ -1,8 +1,3 @@
-FROM ubuntu:latest
-LABEL authors="4987k"
-
-ENTRYPOINT ["top", "-b"]
-
 # Base image
 FROM openjdk:17-jdk-slim
 
@@ -12,7 +7,8 @@ WORKDIR /app
 # JAR 파일 복사
 COPY build/libs/*.jar app.jar
 
+# Spring Profile 설정
 ENV SPRING_PROFILES_ACTIVE=aws
 
 # 애플리케이션 실행
-CMD ["java", "-jar", "app.jar"]
+ENTRYPOINT ["java", "-jar", "app.jar"]

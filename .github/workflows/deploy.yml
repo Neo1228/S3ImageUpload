@@ -65,7 +65,7 @@ jobs:
         uses: appleboy/ssh-action@v0.1.7
         with:
           host: ${{ secrets.EC2_HOST }}
-          username: ec2-user
+          username: ubuntu
           key: ${{ secrets.EC2_KEY }} # Secrets에서 직접 참조
           port: 22
           debug: true

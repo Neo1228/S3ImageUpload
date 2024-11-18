@@ -33,7 +33,6 @@ jobs:
           echo "AWS_REGION=${{ secrets.AWS_REGION }}" >> $GITHUB_ENV
           echo "AWS_BUCKET=${{ secrets.AWS_BUCKET }}" >> $GITHUB_ENV
           echo "EC2_HOST=${{ secrets.EC2_HOST }}" >> $GITHUB_ENV
-          echo "EC2_KEY=${{ secrets.EC2_KEY }}" >> $GITHUB_ENV
 
       # Gradle 빌드
       - name: Build with Gradle
@@ -59,17 +58,15 @@ jobs:
     steps:
       # 디버깅: Secrets 값 확인
       - name: Debug secrets
-        run: |
-          echo "EC2_HOST=${{ secrets.EC2_HOST }}"
-          echo "EC2_KEY=${{ secrets.EC2_KEY }}" | tr -d "\n" | head -c 20  # 키 내용 일부만 출력
+        run: echo "EC2_HOST=${{ secrets.EC2_HOST }}"
 
       # SSH를 사용해 EC2에 접속하여 Docker 컨테이너 실행
       - name: Deploy to EC2
         uses: appleboy/ssh-action@v0.1.7
         with:
-          host: ${{ env.EC2_HOST }}   # 환경 변수에서 가져오기
+          host: ${{ secrets.EC2_HOST }}
           username: ec2-user
-          key: ${{ env.EC2_KEY }}     # 환경 변수에서 가져오기
+          key: ${{ secrets.EC2_KEY }} # Secrets에서 직접 참조
           port: 22
           debug: true
           script: |

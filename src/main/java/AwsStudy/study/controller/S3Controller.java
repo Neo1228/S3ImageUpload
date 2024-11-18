@@ -17,9 +17,9 @@ public class S3Controller {
 
     private final S3Uploader s3Uploader;
 
-    @GetMapping("/")
-    public String home() {
-        return "upload"; // templates/upload.html 로 매핑
+    @GetMapping("/upload")
+    public String uploadPage() {
+        return "upload"; // templates/upload.html로 매핑
     }
 
     @PostMapping("/upload")
@@ -27,7 +27,7 @@ public class S3Controller {
         try {
             String url = s3Uploader.uploadFile(file, "images"); // S3에 파일 업로드
             model.addAttribute("url", url); // 업로드된 파일 URL을 모델에 추가
-            return "result"; // templates/result.html 로 매핑
+            return "result"; // templates/result.html로 매핑
         } catch (IOException e) {
             model.addAttribute("error", "파일 업로드 실패: " + e.getMessage());
             return "upload"; // 실패 시 다시 업로드 페이지로

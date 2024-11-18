@@ -32,6 +32,8 @@ jobs:
           echo "AWS_SECRET_KEY=${{ secrets.AWS_SECRET_KEY }}" >> $GITHUB_ENV
           echo "AWS_REGION=${{ secrets.AWS_REGION }}" >> $GITHUB_ENV
           echo "AWS_BUCKET=${{ secrets.AWS_BUCKET }}" >> $GITHUB_ENV
+          echo "EC2_HOST=${{ secrets.EC2_HOST }}" >> $GITHUB_ENV
+          echo "EC2_KEY=${{ secrets.EC2_KEY }}" >> $GITHUB_ENV
 
       # Gradle 빌드
       - name: Build with Gradle
@@ -65,9 +67,9 @@ jobs:
       - name: Deploy to EC2
         uses: appleboy/ssh-action@v0.1.7
         with:
-          host: ${{ secrets.EC2_HOST }}
+          host: ${{ env.EC2_HOST }}   # 환경 변수에서 가져오기
           username: ec2-user
-          key: ${{ secrets.EC2_KEY }}
+          key: ${{ env.EC2_KEY }}     # 환경 변수에서 가져오기
           port: 22
           debug: true
           script: |

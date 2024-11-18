@@ -1,3 +1,13 @@
 spring:
   profiles:
     active: aws
+
+  thymeleaf:
+    cache: false           # 개발 중에는 캐싱 비활성화
+    prefix: classpath:/templates/ # 템플릿 파일 위치
+    suffix: .html          # 템플릿 파일 확장자
+    mode: HTML             # 렌더링 모드
+  web:
+    resources:
+      cache:
+        period: 0          # 리소스 캐싱 비활성화

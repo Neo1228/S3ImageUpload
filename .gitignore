@@ -44,5 +44,4 @@ out/
 /build
 
 # Ignore AWS credentials
-application.yml
 application.properties
